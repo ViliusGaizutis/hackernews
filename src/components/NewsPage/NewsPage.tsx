@@ -10,6 +10,7 @@ import { getNewsStory } from "../../redux/actionCreators/news";
 
 // Components
 import Icon from "../Icon/Icon";
+import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
 // Styles
 import "../../styles/global.css";
@@ -19,7 +20,9 @@ import "./news.css";
 import { formatDate } from "../../utils/helpers";
 
 const NewsPage: FunctionComponent = () => {
-  const { data, loading } = useAppSelector((state) => state.news.current);
+  const { data, loading, error } = useAppSelector(
+    (state) => state.news.current
+  );
 
   const { storyId } = useParams();
   const dispatch = useDispatch();
@@ -39,27 +42,29 @@ const NewsPage: FunctionComponent = () => {
         <Link to="/">
           <Button type="primary">Go Back</Button>
         </Link>
-        <Card
-          className="card"
-          loading={loading}
-          extra={<a href={data?.url}>Read more</a>}
-          actions={[
-            <Icon
-              icon={MessageOutlined}
-              text={`${data?.descendants}`}
-              key="list-vertical-message"
-            />,
-            <ReloadOutlined onClick={handleGetNewsStory} />,
-          ]}
-        >
-          <Card.Meta
-            title={data && data.title}
-            description={data && `${data.by} | ${formatDate(data.time)}`}
-          />
-          <div className="card__no-data">
-            {data?.text ? data.text : <span>No text available</span>}
-          </div>
-        </Card>
+        <ErrorBoundary data={data} loading={loading} error={error}>
+          <Card
+            className="card"
+            loading={loading}
+            extra={<a href={data?.url}>Read more</a>}
+            actions={[
+              <Icon
+                icon={MessageOutlined}
+                text={`${data?.descendants}`}
+                key="list-vertical-message"
+              />,
+              <ReloadOutlined onClick={handleGetNewsStory} />,
+            ]}
+          >
+            <Card.Meta
+              title={data && data.title}
+              description={data && `${data.by} | ${formatDate(data.time)}`}
+            />
+            <div className="card__no-data">
+              {data?.text ? data.text : <span>No text available</span>}
+            </div>
+          </Card>
+        </ErrorBoundary>
       </div>
     </main>
   );

@@ -10,6 +10,7 @@ import { getAllNews } from "../../redux/actionCreators/news";
 
 // Components
 import Icon from "../Icon/Icon";
+import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 
 // Styles
 import "../../styles/global.css";
@@ -19,7 +20,7 @@ import "./home.css";
 import { formatDate } from "../../utils/helpers";
 
 const HomePage: FunctionComponent = () => {
-  const { data, loading } = useAppSelector((state) => state.news.list);
+  const { data, loading, error } = useAppSelector((state) => state.news.list);
 
   const dispatch = useDispatch();
 
@@ -43,42 +44,44 @@ const HomePage: FunctionComponent = () => {
         <Button type="primary" onClick={handleGetAllNews}>
           Refresh
         </Button>
-        <List
-          loading={loading}
-          itemLayout="vertical"
-          size="large"
-          className="list"
-          pagination={{
-            pageSize: 5,
-          }}
-          dataSource={data}
-          renderItem={(item) => {
-            const slug = `stories/${item.id}`;
+        <ErrorBoundary data={data} loading={loading} error={error}>
+          <List
+            loading={loading}
+            itemLayout="vertical"
+            size="large"
+            className="list"
+            pagination={{
+              pageSize: 5,
+            }}
+            dataSource={data}
+            renderItem={(item) => {
+              const slug = `stories/${item.id}`;
 
-            return (
-              <>
-                <Link to={slug}>
-                  <List.Item
-                    key={item.id}
-                    actions={[
-                      <Icon
-                        icon={StarOutlined}
-                        text={`${item.score}`}
-                        key="list-vertical-star-o"
-                      />,
-                    ]}
-                  >
-                    <List.Item.Meta
-                      title={item.title}
-                      description={`${item.by} | ${formatDate(item.time)}`}
-                    />
-                  </List.Item>
-                </Link>
-                <Divider />
-              </>
-            );
-          }}
-        />
+              return (
+                <>
+                  <Link to={slug}>
+                    <List.Item
+                      key={item.id}
+                      actions={[
+                        <Icon
+                          icon={StarOutlined}
+                          text={`${item.score}`}
+                          key="list-vertical-star-o"
+                        />,
+                      ]}
+                    >
+                      <List.Item.Meta
+                        title={item.title}
+                        description={`${item.by} | ${formatDate(item.time)}`}
+                      />
+                    </List.Item>
+                  </Link>
+                  <Divider />
+                </>
+              );
+            }}
+          />
+        </ErrorBoundary>
       </div>
     </main>
   );
