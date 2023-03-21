@@ -1,0 +1,17 @@
+.container--story button {
+  margin-left: 74%;
+}
+
+.card {
+  width: 900px;
+  margin: 0 20%;
+}
+
+.card__no-data {
+  min-height: 300px;
+  margin-top: 24px;
+}
+
+.card__no-data span {
+  font-style: italic;
+}

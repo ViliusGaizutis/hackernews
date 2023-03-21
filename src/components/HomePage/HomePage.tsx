@@ -49,7 +49,7 @@ const HomePage: FunctionComponent = () => {
           size="large"
           className="list"
           pagination={{
-            pageSize: 10,
+            pageSize: 5,
           }}
           dataSource={data}
           renderItem={(item) => {

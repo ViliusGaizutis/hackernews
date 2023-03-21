@@ -7,7 +7,7 @@ import { BASE_URL } from "../../constants";
 
 export const getAllNews =
   () =>
-  async (dispatch: Dispatch<Action>): Promise<void> => {
+  async (dispatch: Dispatch<Action<NewsStory[]>>): Promise<void> => {
     const stories: NewsStory[] = [];
 
     dispatch({ type: ActionType.GET_ALL_NEWS_PENDING });
@@ -31,6 +31,30 @@ export const getAllNews =
       if (error instanceof Error) {
         dispatch({
           type: ActionType.GET_ALL_NEWS_FAIL,
+          payload: error.message,
+        });
+      }
+    }
+  };
+
+export const getNewsStory =
+  (storyId: string) =>
+  async (dispatch: Dispatch<Action<NewsStory>>): Promise<void> => {
+    dispatch({ type: ActionType.GET_NEWS_STORY_PENDING });
+
+    try {
+      const response = await axios.get<NewsStory>(
+        `${BASE_URL}/item/${storyId}.json?print=pretty`
+      );
+
+      dispatch({
+        type: ActionType.GET_NEWS_STORY_SUCCESS,
+        payload: response.data,
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        dispatch({
+          type: ActionType.GET_NEWS_STORY_FAIL,
           payload: error.message,
         });
       }

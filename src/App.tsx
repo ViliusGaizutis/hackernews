@@ -3,11 +3,13 @@ import { Route, Routes } from "react-router-dom";
 
 // Pages
 const HomePage = lazy(() => import("./components/HomePage/HomePage"));
+const NewsPage = lazy(() => import("./components/NewsPage/NewsPage"));
 
 // Routes
 const routes = [
   { path: "/", name: "Home", Component: HomePage },
   { path: "/stories", name: "Home", Component: HomePage },
+  { path: "/stories/:storyId", name: "Home", Component: NewsPage },
 ];
 
 const App: FunctionComponent = () => {
