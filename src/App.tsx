@@ -1,5 +1,6 @@
 import { FunctionComponent, Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
+import { Spin } from "antd";
 
 // Pages
 const HomePage = lazy(() => import("./components/HomePage/HomePage"));
@@ -14,7 +15,7 @@ const routes = [
 
 const App: FunctionComponent = () => {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<Spin size="large" />}>
       <Routes>
         {routes.map(({ path, Component }) => (
           <Route path={path} key={path} element={<Component />} />
